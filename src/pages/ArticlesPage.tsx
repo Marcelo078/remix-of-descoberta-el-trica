@@ -1,23 +1,9 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { products } from "@/data/products";
+import { articles } from "@/data/articles";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Clock, User, Tag } from "lucide-react";
-
-// Generate articles from products
-const articles = products.slice(0, 8).map((product, index) => ({
-  id: product.id,
-  slug: `analise-${product.slug}`,
-  title: `${product.name} – Análise Completa e Guia de Compra 2024`,
-  excerpt: product.fullDescription,
-  image: product.imageUrl,
-  category: product.category,
-  author: "Marcelo Silva",
-  date: new Date(2024, 11, 20 - index).toLocaleDateString("pt-BR"),
-  readTime: "8 min",
-  keywords: product.keywords
-}));
 
 const ArticlesPage = () => {
   const jsonLd = {
@@ -67,46 +53,48 @@ const ArticlesPage = () => {
             </header>
 
             {/* Featured Article */}
-            <article className="mb-12">
-              <Link
-                to={`/artigo/${articles[0].slug}`}
-                className="block bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all group"
-              >
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="aspect-video md:aspect-auto overflow-hidden">
-                    <img
-                      src={articles[0].image}
-                      alt={articles[0].title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-6 md:p-8 flex flex-col justify-center">
-                    <div className="flex items-center gap-4 mb-4">
-                      <span className="bg-primary/10 text-primary text-xs font-medium px-3 py-1 rounded-full">
-                        Destaque
-                      </span>
-                      <span className="text-muted-foreground text-sm">{articles[0].category}</span>
+            {articles.length > 0 && (
+              <article className="mb-12">
+                <Link
+                  to={`/artigo/${articles[0].slug}`}
+                  className="block bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all group"
+                >
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="aspect-video md:aspect-auto overflow-hidden">
+                      <img
+                        src={articles[0].image}
+                        alt={articles[0].imageAlt}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
                     </div>
-                    <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">
-                      {articles[0].title}
-                    </h2>
-                    <p className="text-muted-foreground mb-6 line-clamp-3">
-                      {articles[0].excerpt}
-                    </p>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <User className="w-4 h-4" />
-                        {articles[0].author}
+                    <div className="p-6 md:p-8 flex flex-col justify-center">
+                      <div className="flex items-center gap-4 mb-4">
+                        <span className="bg-primary/10 text-primary text-xs font-medium px-3 py-1 rounded-full">
+                          Destaque
+                        </span>
+                        <span className="text-muted-foreground text-sm">{articles[0].category}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {articles[0].readTime}
+                      <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">
+                        {articles[0].title}
+                      </h2>
+                      <p className="text-muted-foreground mb-6 line-clamp-3">
+                        {articles[0].excerpt}
+                      </p>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <User className="w-4 h-4" />
+                          {articles[0].author}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-4 h-4" />
+                          {articles[0].readTime}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </article>
+                </Link>
+              </article>
+            )}
 
             {/* Articles Grid */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -118,7 +106,7 @@ const ArticlesPage = () => {
                   <div className="aspect-video overflow-hidden">
                     <img
                       src={article.image}
-                      alt={article.title}
+                      alt={article.imageAlt}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       loading="lazy"
                     />
@@ -132,7 +120,7 @@ const ArticlesPage = () => {
                       {article.title}
                     </h2>
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>{article.date}</span>
+                      <span>{new Date(article.date).toLocaleDateString("pt-BR")}</span>
                       <span>{article.readTime} de leitura</span>
                     </div>
                     <Button variant="outline" size="sm" className="mt-4" asChild>
